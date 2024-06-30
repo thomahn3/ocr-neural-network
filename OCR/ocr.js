@@ -49,25 +49,6 @@ var canvas, ctx, flag = false,
     }
     */
 
-    function getData() {
-        const imgData = ctx.getImageData(0, 0, w, h);
-        
-        // Initialize an empty array to store the color values.
-        const colorArray = [];
-        // Store the color values in the array.
-        for (let i = 0; i < imgData.data.length; i += 4) {
-            const r = imgData.data[i];     // Red
-            const g = imgData.data[i+1];   // Green
-            const b = imgData.data[i+2];   // Blue
-            const a = imgData.data[i+3];   // Alpha
-            colorArray.push({r, g, b, a});
-        }
-    
-        // Log the array to the console.
-        console.log(colorArray)
-        return colorArray
-    }
-
     function draw() {
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
@@ -79,7 +60,6 @@ var canvas, ctx, flag = false,
     }
     
     function erase() {
-        getData()
         ctx.clearRect(0, 0, w, h);
     }
     
@@ -114,10 +94,27 @@ var canvas, ctx, flag = false,
         }
     }
 
+function getData(colorArray) {
+    const imgData = ctx.getImageData(0, 0, w, h);
+    
+    // Initialize an empty array to store the color values.
+    // Store the color values in the array.
+    for (let i = 0; i < imgData.data.length; i += 4) {
+        const r = imgData.data[i];     // Red
+        const g = imgData.data[i+1];   // Green
+        const b = imgData.data[i+2];   // Blue
+        const a = imgData.data[i+3];   // Alpha
+        colorArray.push({r, g, b, a});
+    }
 
+    // Log the array to the console.
+    console.log(colorArray)
+    return colorArray
+}
 
 function train() {
-    getData()
+    const colorArray = []
+    getData(colorArray)
     const trainArray = [];
     var digitVal = document.getElementById("digit").value;
     if (!digitVal || digitVal < 0) {
