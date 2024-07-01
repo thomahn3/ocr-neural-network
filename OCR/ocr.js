@@ -1,3 +1,7 @@
+var cors = require('cors')
+
+app.use(cors())
+
 var canvas, ctx, flag = false,
         prevX = 0,
         currX = 0,
@@ -58,10 +62,7 @@ var canvas, ctx, flag = false,
         ctx.stroke();
         ctx.closePath();
     }
-    
-    function erase() {
-        ctx.clearRect(0, 0, w, h);
-    }
+
     
     function findxy(res, e) {
         if (res == 'down') {
@@ -93,6 +94,9 @@ var canvas, ctx, flag = false,
             }
         }
     }
+function erase() {
+    ctx.clearRect(0, 0, w, h);
+}
 
 function getData(colorArray) {
     const imgData = ctx.getImageData(0, 0, w, h);
