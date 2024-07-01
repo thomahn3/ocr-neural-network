@@ -1,3 +1,4 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var canvas, ctx, flag = false,
         prevX = 0,
         currX = 0,
@@ -118,13 +119,13 @@ function train() {
     const trainArray = [];
     var digitVal = document.getElementById("digit").value;
     if (!digitVal || digitVal < 0) {
-        console.log("Please type and draw a digit value in order to train the network");
+        alert("Please type and draw a digit value in order to train the network");
         return;
     }
     
     trainArray.push({"y0": colorArray, "label": parseInt(digitVal)});
     // Time to send a training batch to the server.
-    console.log("Sending training data to server...");
+    alert("Sending training data to server...");
     var json = {
         trainArray: trainArray,
         train: true
@@ -135,7 +136,7 @@ function train() {
 
 function test() {
     if (!colorArray) {
-        console.log("Please draw a digit in order to test the network");
+        alert("Please draw a digit in order to test the network");
         return;
     }
     var json = {
@@ -147,11 +148,12 @@ function test() {
 
 function saveData(json) {
     var msg = JSON.stringify(json);
-    const blob = new Blob([msg], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'data.json'; // Specify the filename
-    a.click();
-    URL.revokeObjectURL(url);
+    console.log(json)
+    var fs = require('fs');
+    fs.writeFile("data.txt", msg, function(err) {
+        if (err) {
+            console.log(err);
+        }
+    });
 }
+},{"fs":undefined}]},{},[1]);

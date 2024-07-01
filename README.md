@@ -1,2 +1,2 @@
 # ocr-neural-network
- An Optical Character Recgonition neural network in python
+ An Optical Character Recgonition neural network

@@ -1,6 +1,11 @@
 import json
 import torch.nn as nn
+from fastapi import FastAPI
 
+# app = FastAPI()
+# app.get("/data")
+# def data():
+#      return {"status": "ok"}
 
 def do_POST(s):
         response_code = 200
