@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "browserify": "^17.0.0",
-    "cors": "^2.8.5",
-    "reproject": "^1.2.7"
-  }
-}
