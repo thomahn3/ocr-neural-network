@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "hotml": "^1.1.0",
+    "mathjs": "^13.0.1",
+    "ml-matrix": "^6.11.1"
+  }
+}
