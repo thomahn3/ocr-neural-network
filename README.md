@@ -1,4 +1,6 @@
 # ocr-neural-network
- An Optical Character Recgonition neural network
+ An Optical Character Recgonition neural network in python
 
-## INCOMPLETE
+## Downsides
+- No gpu functionality therefore slow
+

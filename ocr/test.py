@@ -4,6 +4,9 @@ import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 import gc
+import time
+import pickle
+
 
 def init_params(layer_dims):
     np.random.seed(3)
@@ -19,15 +22,22 @@ def sigmoid(Z):
     cache = Z
     return A, cache
 
+def tanh(Z):
+    A = (np.exp(Z)-np.exp(-Z))/(np.exp(Z)+np.exp(-Z))
+    cache = Z
+    return A, cache
+
 def forward_prop(X, params):
     A = X
     caches = []
     L = len(params) // 2
     for l in range(1, L + 1):
         A_prev = A
-        Z = np.dot(params['W' + str(l)], A_prev) + params['b' + str(l)]
-        linear_cache = (A_prev, params['W' + str(l)], params['b' + str(l)])
-        A, activation_cache = sigmoid(Z)
+        W = params['W' + str(l)]
+        b = params['b' + str(l)]
+        Z = np.dot(W, A_prev) + b
+        linear_cache = (A_prev, W, b)
+        A, activation_cache = tanh(Z)
         cache = (linear_cache, activation_cache)
         caches.append(cache)
     return A, caches
@@ -43,10 +53,15 @@ def sigmoid_backward(dA, Z):
     dZ = dA * s * (1 - s)
     return dZ
 
+def tanh_backward(dA, Z):
+    s = (np.exp(Z)-np.exp(-Z))/(np.exp(Z)+np.exp(-Z))
+    dZ = dA * s * (1 - s)
+    return dZ
+
 def one_layer_backward(dA, cache):
     linear_cache, activation_cache = cache
     Z = activation_cache
-    dZ = sigmoid_backward(dA, Z)
+    dZ = tanh_backward(dA, Z)
     A_prev, W, b = linear_cache
     m = A_prev.shape[1]
     dW = (1 / m) * np.dot(dZ, A_prev.T)
@@ -94,8 +109,8 @@ def train(X, Y, layer_dims, epochs, lr, batch_size):
             Y_hat, caches = forward_prop(X_batch, params)
             cost = cost_function(Y_hat, Y_batch)
             grads = backprop(Y_hat, Y_batch, caches)
-            params = update_parameters(params, grads, lr)
-
+            updated_params = update_parameters(params, grads, lr)
+            params = updated_params
         cost_history.append(cost)
         if i % 100 == 0:
             print(f"Cost after epoch {i}: {cost}")
@@ -111,8 +126,8 @@ def predict(X, params):
 
 def load_and_preprocess_data(csv_file):
     data = pd.read_csv(csv_file)
-    X = data.iloc[:, 1:].values.astype(np.float32)
-    y = data.iloc[:, 0].values.astype(np.int32)
+    X = data.iloc[:, 1:].values.astype(np.float64)
+    y = data.iloc[:, 0].values.astype(np.int64)
 
     X = X / 255.0
 
@@ -127,26 +142,46 @@ def load_and_preprocess_data(csv_file):
 
     return X_train, X_test, Y_train, Y_test
 
+def save_params(params, filename):
+    with open(filename, 'wb') as file:
+        pickle.dump(params, file)
+
+def load_params(filename):
+    with open(filename, 'rb') as file:
+        params = pickle.load(file)
+    return params
+
 def main():
+    start_time = time.time()
     csv_file = 'ocr/Data/mnist_train.csv'
     X_train, X_test, Y_train, Y_test = load_and_preprocess_data(csv_file)
 
     layer_dims = [784, 16, 16, 10]
-    epochs = 1000
     learning_rate = 0.01
-    batch_size = 128  # Define a batch size
+    batch_size = int(input("Data Processing Size?: "))  # Define a batch size
+    mode = input("Enter mode (train/retrain/predict): ").strip().lower()
+    params_file = 'ocr/Data/model_params.pkl'
 
-    params, cost_history = train(X_train, Y_train, layer_dims, epochs, learning_rate, batch_size)
+    if mode == 'train':
+        epochs = int(input("How many iterations?: "))
+        params, cost_history = train(X_train, Y_train, layer_dims, epochs, learning_rate, batch_size)
+        save_params(params, params_file)
+        print("Training completed and parameters saved.")
+    elif mode == 'retrain':
+        epochs = int(input("How many iterations?: "))
+        params = load_params(params_file)
+        params, cost_history = train(X_train, Y_train, layer_dims, epochs, learning_rate, batch_size)
+        save_params(params, params_file)
+        print("Retraining completed and parameters updated.")
+    elif mode == 'predict':
+        params = load_params(params_file)
+        predictions = predict(X_test, params)
+        accuracy = np.mean(np.argmax(predictions, axis=0) == np.argmax(Y_test, axis=0)) * 100
+        print(f"Accuracy on test set: {accuracy}%")
+    else:
+        print("Invalid mode. Please choose from 'train', 'retrain', or 'predict'.")
 
-    plt.plot(cost_history)
-    plt.xlabel("Epochs")
-    plt.ylabel("Cost")
-    plt.title("Cost reduction over time")
-    plt.show()
-
-    predictions = predict(X_test, params)
-    accuracy = np.mean(np.argmax(predictions, axis=0) == np.argmax(Y_test, axis=0)) * 100
-    print(f"Accuracy on test set: {accuracy}%")
+    print(f"Time taken: {((time.time() - start_time) / 60):.2f} mins")
 
 if __name__ == "__main__":
     main()
