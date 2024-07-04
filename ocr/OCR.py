@@ -136,7 +136,7 @@ def main():
     csv_file = 'ocr/Data/mnist_train.csv'
     X_train, X_test, Y_train, Y_test = load_and_preprocess_data(csv_file)
 
-    layer_dims = [784, 16, 16, 10]
+    layer_dims = [784, 250, 50, 10]
     epochs = int(input("How many iterations?: "))
     learning_rate = 0.01
     batch_size = int(input("Data Processing Size?: "))  # Define a batch size
@@ -148,6 +148,7 @@ def main():
     accuracy = np.mean(np.argmax(predictions, axis=0) == np.argmax(Y_test, axis=0)) * 100
     print(f"{epochs} iterations")
     print(f"Batch size: {batch_size}")
+    print(layer_dims)
     print(f"Accuracy on test set: {accuracy}%")
     print("--- %s mins ---" % ((time.time() - start_time)/60))
 
