@@ -1,2 +1,4 @@
-/ocr/Data
+/ocr/data/mnist_test.csv
+/ocr/data/mnist_train.csv
+/ocr/data/model_params.pkl
 /ocr/node_modules
