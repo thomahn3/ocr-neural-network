@@ -1,7 +1,7 @@
 # ocr-neural-network
 - An Optical Character Recgonition neural network in python
 - Uses MNIST Datasets in .csv form
-- No Tesnorflow, or pytorch
+- No Tensorflow, or pytorch
 
 ## Downsides
 - No gpu functionality therefore slow as built from scratch
