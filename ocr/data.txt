@@ -4,7 +4,8 @@ Accuracy on test set: 92.31666666666666%
 --- 58.35927462180455 mins ---
 
 1000 iterations
-Batch size: 10000
-Accuracy on test set: 9.700000000000001%
---- 5.665388119220734 mins ---
+Batch size: 512
+Accuracy on test set: 21.366666666666667%
+--- 6.753216381867727 mins ---
+
 
