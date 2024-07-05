@@ -136,7 +136,7 @@ def main():
     csv_file = 'ocr/Data/mnist_train.csv'
     X_train, X_test, Y_train, Y_test = load_and_preprocess_data(csv_file)
 
-    layer_dims = [784, 250, 50, 10]
+    layer_dims = [784, 300, 100, 10]
     epochs = int(input("How many iterations?: "))
     learning_rate = 0.01
     batch_size = int(input("Data Processing Size?: "))  # Define a batch size

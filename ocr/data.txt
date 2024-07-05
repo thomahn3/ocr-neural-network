@@ -16,6 +16,12 @@ Batch size: 512
 Accuracy on test set: 97.02499999999999%
 --- 214.48630536397297 mins ---
 
+10000 iterations
+Batch size: 512
+[784, 300, 100, 10]
+Accuracy on test set: 97.0%
+--- 455.106367568175 mins ---
+
 7500 iterations
 Batch size: 512
 [784, 16, 16, 10]
